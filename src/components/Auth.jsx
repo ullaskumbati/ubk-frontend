@@ -41,14 +41,29 @@ export default function Auth({ onLoginSuccess, api }) {
         onLoginSuccess();
       }
     } catch (err) {
-      showMessage(err.response?.data?.message || "Authentication failed", "error");
+      const errorMessage = 
+        err.response?.data?.message || 
+        err.response?.data || 
+        err.message || 
+        "Authentication failed";
+        
+      showMessage(errorMessage, "error");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#07090e] text-slate-100 flex items-center justify-center p-4 selection:bg-cyan-500 selection:text-black">
+    <div className="min-h-screen bg-[#07090e] text-slate-100 flex items-center justify-center p-4 selection:bg-cyan-500 selection:text-black relative">
+      
+      {/* Toast Notification Banner (Floating top-right, zero layout shift) */}
+      {message.text && (
+        <div className={`fixed top-6 right-6 z-50 px-4 py-3 rounded-2xl text-xs flex items-center gap-2.5 shadow-2xl backdrop-blur-xl animate-fade-in ${message.type === 'error' ? 'bg-red-500/15 text-red-400 border border-red-500/30' : 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30'}`}>
+          {message.type === 'error' ? <AlertCircle size={16} className="shrink-0" /> : <CheckCircle size={16} className="shrink-0" />}
+          <span>{message.text}</span>
+        </div>
+      )}
+
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.05)_0,transparent_100%)] pointer-events-none" />
       <div className="relative bg-[#0d121f] border border-slate-800/80 p-8 rounded-3xl w-full max-w-md shadow-[0_0_50px_rgba(0,0,0,0.8)] backdrop-blur-xl">
         
@@ -63,13 +78,6 @@ export default function Auth({ onLoginSuccess, api }) {
             {authMode === "login" ? "Enter your credentials to access your portal" : "Fill in details to set up your creator profile"}
           </p>
         </div>
-
-        {message.text && (
-          <div className={`mb-6 p-3 rounded-xl text-xs flex items-center gap-2.5 ${message.type === 'error' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'}`}>
-            {message.type === 'error' ? <AlertCircle size={16} /> : <CheckCircle size={16} />}
-            {message.text}
-          </div>
-        )}
 
         <form onSubmit={handleAuth} className="space-y-4">
           {authMode === "register" && (
@@ -129,7 +137,7 @@ export default function Auth({ onLoginSuccess, api }) {
           >
             {loading && <Loader2 size={18} className="animate-spin" />}
             {loading 
-              ? (authMode === "register" ? "Registering..." : "Signing in...") 
+              ? (authMode === "register" ? "Uploading files & registering..." : "Signing in...") 
               : (authMode === "login" ? "Sign In" : "Register Account")}
           </button>
         </form>
