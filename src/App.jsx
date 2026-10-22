@@ -5,7 +5,7 @@ import { User, LogOut, History, RefreshCw, Settings as SettingsIcon, CheckCircle
 import Auth from "./components/Auth";
 import Dashboard from "./components/Dashboard";
 import Settings from "./components/Settings";
-import ChannelProfile from "./components/channelProfile";
+import ChannelProfile from "./components/channelProfile"
 import WatchHistory from "./components/WatchHistory";
 
 export default function App() {
