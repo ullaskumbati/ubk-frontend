@@ -81,7 +81,7 @@ export default function App() {
             <img src={user.avatar} alt="Avatar" className="w-10 h-10 rounded-full object-cover border border-cyan-500" />
             <div className="overflow-hidden">
               <h4 className="font-semibold text-sm truncate text-slate-200">{user.fullName}</h4>
-              <p className="text-xs text-cyan-400 truncate font-mono">@{user.username}</p>
+              <p className="text-xs text-cyan-400 truncate font-mono">@{user.userName}</p>
             </div>
           </div>
 
