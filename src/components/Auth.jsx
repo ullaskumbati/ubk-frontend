@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CheckCircle, AlertCircle } from "lucide-react";
+import { CheckCircle, AlertCircle, Eye, EyeOff } from "lucide-react";
 
 export default function Auth({ onLoginSuccess, api }) {
   const [authMode, setAuthMode] = useState("login");
@@ -7,6 +7,7 @@ export default function Auth({ onLoginSuccess, api }) {
   const [avatarFile, setAvatarFile] = useState(null);
   const [coverFile, setCoverFile] = useState(null);
   const [message, setMessage] = useState({ text: "", type: "" });
+  const [showPassword, setShowPassword] = useState(false);
 
   const showMessage = (text, type = "success") => {
     setMessage({ text, type });
@@ -96,7 +97,23 @@ export default function Auth({ onLoginSuccess, api }) {
 
           <div>
             <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Password</label>
-            <input type="password" placeholder="••••••••" value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} className="w-full mt-1.5 bg-[#04060a] border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-all" required />
+            <div className="relative mt-1.5">
+              <input 
+                type={showPassword ? "text" : "password"} 
+                placeholder="••••••••" 
+                value={formData.password} 
+                onChange={e => setFormData({...formData, password: e.target.value})} 
+                className="w-full bg-[#04060a] border border-slate-800 rounded-xl px-4 py-3 pr-11 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-all" 
+                required 
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 focus:outline-none transition-colors"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
 
           <button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-semibold py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] mt-2">
