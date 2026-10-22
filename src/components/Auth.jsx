@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CheckCircle, AlertCircle, Eye, EyeOff, Loader2 } from "lucide-react";
+import { CheckCircle, AlertCircle, Eye, EyeOff } from "lucide-react";
 
 export default function Auth({ onLoginSuccess, api }) {
   const [authMode, setAuthMode] = useState("login");
@@ -8,7 +8,6 @@ export default function Auth({ onLoginSuccess, api }) {
   const [coverFile, setCoverFile] = useState(null);
   const [message, setMessage] = useState({ text: "", type: "" });
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const showMessage = (text, type = "success") => {
     setMessage({ text, type });
@@ -17,7 +16,6 @@ export default function Auth({ onLoginSuccess, api }) {
 
   const handleAuth = async (e) => {
     e.preventDefault();
-    setLoading(true);
     try {
       if (authMode === "register") {
         const data = new FormData();
@@ -42,8 +40,6 @@ export default function Auth({ onLoginSuccess, api }) {
       }
     } catch (err) {
       showMessage(err.response?.data?.message || "Authentication failed", "error");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -76,27 +72,27 @@ export default function Auth({ onLoginSuccess, api }) {
             <>
               <div>
                 <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Full Name</label>
-                <input type="text" placeholder="John Doe" value={formData.fullName} onChange={e => setFormData({...formData, fullName: e.target.value})} disabled={loading} className="w-full mt-1.5 bg-[#04060a] border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-all disabled:opacity-50" required />
+                <input type="text" placeholder="John Doe" value={formData.fullName} onChange={e => setFormData({...formData, fullName: e.target.value})} className="w-full mt-1.5 bg-[#04060a] border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-all" required />
               </div>
               <div>
                 <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Avatar Image</label>
-                <input type="file" onChange={e => setAvatarFile(e.target.files[0])} disabled={loading} className="w-full mt-1.5 text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-medium file:bg-cyan-500 file:text-black hover:file:bg-cyan-400 cursor-pointer disabled:opacity-50" required />
+                <input type="file" onChange={e => setAvatarFile(e.target.files[0])} className="w-full mt-1.5 text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-medium file:bg-cyan-500 file:text-black hover:file:bg-cyan-400 cursor-pointer" required />
               </div>
               <div>
                 <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Cover Image (Optional)</label>
-                <input type="file" onChange={e => setCoverFile(e.target.files[0])} disabled={loading} className="w-full mt-1.5 text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-medium file:bg-slate-800 file:text-slate-300 hover:file:bg-slate-700 cursor-pointer disabled:opacity-50" />
+                <input type="file" onChange={e => setCoverFile(e.target.files[0])} className="w-full mt-1.5 text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-medium file:bg-slate-800 file:text-slate-300 hover:file:bg-slate-700 cursor-pointer" />
               </div>
             </>
           )}
 
           <div>
             <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Email</label>
-            <input type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} disabled={loading} className="w-full mt-1.5 bg-[#04060a] border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-all disabled:opacity-50" required />
+            <input type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full mt-1.5 bg-[#04060a] border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-all" required />
           </div>
 
           <div>
             <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">UserName</label>
-            <input type="text" placeholder="johndoe" value={formData.userName} onChange={e => setFormData({...formData, userName: e.target.value})} disabled={loading} className="w-full mt-1.5 bg-[#04060a] border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-all disabled:opacity-50" required />
+            <input type="text" placeholder="johndoe" value={formData.userName} onChange={e => setFormData({...formData, userName: e.target.value})} className="w-full mt-1.5 bg-[#04060a] border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-all" required />
           </div>
 
           <div>
@@ -107,14 +103,12 @@ export default function Auth({ onLoginSuccess, api }) {
                 placeholder="••••••••" 
                 value={formData.password} 
                 onChange={e => setFormData({...formData, password: e.target.value})} 
-                disabled={loading}
-                className="w-full bg-[#04060a] border border-slate-800 rounded-xl px-4 py-3 pr-11 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-all disabled:opacity-50" 
+                className="w-full bg-[#04060a] border border-slate-800 rounded-xl px-4 py-3 pr-11 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-all" 
                 required 
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                disabled={loading}
                 className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 focus:outline-none transition-colors"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -122,23 +116,16 @@ export default function Auth({ onLoginSuccess, api }) {
             </div>
           </div>
 
-          <button 
-            type="submit" 
-            disabled={loading}
-            className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-semibold py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] mt-2 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            {loading && <Loader2 size={18} className="animate-spin" />}
-            {loading 
-              ? (authMode === "register" ? "Uploading files & registering..." : "Signing in...") 
-              : (authMode === "login" ? "Sign In" : "Register Account")}
+          <button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-semibold py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] mt-2">
+            {authMode === "login" ? "Sign In" : "Register Account"}
           </button>
         </form>
 
         <div className="mt-6 text-center text-xs text-slate-400">
           {authMode === "login" ? (
-            <p>Don't have an account? <button onClick={() => setAuthMode("register")} disabled={loading} className="text-cyan-400 font-semibold hover:underline disabled:opacity-50">Register</button></p>
+            <p>Don't have an account? <button onClick={() => setAuthMode("register")} className="text-cyan-400 font-semibold hover:underline">Register</button></p>
           ) : (
-            <p>Already have an account? <button onClick={() => setAuthMode("login")} disabled={loading} className="text-cyan-400 font-semibold hover:underline disabled:opacity-50">Sign In</button></p>
+            <p>Already have an account? <button onClick={() => setAuthMode("login")} className="text-cyan-400 font-semibold hover:underline">Sign In</button></p>
           )}
         </div>
       </div>
