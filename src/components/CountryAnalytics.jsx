@@ -8,22 +8,9 @@ export default function CountryAnalytics({ api, showMessage }) {
     const [sortBy, setSortBy] = useState('population-desc');
     const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-    api.get('/countries')
-      .then((res) => {
-        // Correct path based on your console log: res.data.data.objects
-        const countryList = res?.data?.data?.objects || [];
-        setCountries(countryList);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error fetching countries:', err);
-        setLoading(false);
-      });
-  }, [api]);
+    // Single unified effect handling both initial load and server-side search
     useEffect(() => {
-        // Pass the search term to your backend route
-        const endpoint = search ? `/countries?search=${search}` : '/countries';
+        const endpoint = search.trim() ? `/countries?search=${encodeURIComponent(search)}` : '/countries';
 
         api.get(endpoint)
             .then((res) => {
