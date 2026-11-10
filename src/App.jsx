@@ -9,7 +9,8 @@ import {
   CheckCircle,
   AlertCircle,
   Eye,
-  ChefHat
+  ChefHat,
+  Globe
 } from "lucide-react";
 
 import Auth from "./components/Auth";
