@@ -8,18 +8,28 @@ export default function CountryAnalytics({ api, showMessage }) {
     const [sortBy, setSortBy] = useState('population-desc');
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        api.get('/countries') // Calls your Render/local backend endpoint securely
-            .then((res) => {
-                const countryList = res?.data?.data?.data?.objects || [];
-                setCountries(countryList);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error('Error fetching countries:', err);
-                setLoading(false);
-            });
-    }, [api]);
+useEffect(() => {
+  api.get('/countries')
+    .then((res) => {
+      console.log("Raw API Response:", res?.data); // Check your browser console to see what came back
+      
+      // Safe fallback: check multiple possible nesting levels
+      const countryList = 
+        res?.data?.data?.objects || 
+        res?.data?.objects || 
+        res?.data?.data?.data?.objects || 
+        [];
+        
+      if (countryList.length > 0) {
+        setCountries(countryList);
+      }
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.error('Error fetching countries:', err);
+      setLoading(false);
+    });
+}, []); // Empty dependency array ensures it only fetches ONCE on mount, preventing accidental re-fetch loops
     useEffect(() => {
         // Pass the search term to your backend route
         const endpoint = search ? `/countries?search=${search}` : '/countries';
