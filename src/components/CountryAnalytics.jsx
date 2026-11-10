@@ -1,25 +1,25 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Globe, Search, ArrowUpDown, Users, MapPin, Landmark } from 'lucide-react';
 
-export default function CountryAnalytics({api,showMessage}) {
+export default function CountryAnalytics({ api, showMessage }) {
   const [countries, setCountries] = useState([]);
   const [search, setSearch] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('All');
   const [sortBy, setSortBy] = useState('population-desc');
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  api.get('/countries') // Calls your Render/local backend endpoint securely
-    .then((res) => {
-      const countryList = res?.data?.data?.data?.objects || [];
-      setCountries(countryList);
-      setLoading(false);
-    })
-    .catch((err) => {
-      console.error('Error fetching countries:', err);
-      setLoading(false);
-    });
-}, [api]);
+  useEffect(() => {
+    api.get('/countries') // Calls your Render/local backend endpoint securely
+      .then((res) => {
+        const countryList = res?.data?.data?.data?.objects || [];
+        setCountries(countryList);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Error fetching countries:', err);
+        setLoading(false);
+      });
+  }, [api]);
 
   const filteredCountries = useMemo(() => {
     return countries
@@ -37,9 +37,15 @@ useEffect(() => {
       });
   }, [countries, search, selectedRegion, sortBy]);
 
-  const totalPopulation = useMemo(() => {
+  // 1. Total population of countries matching your current search/region filters
+  const totalFilteredPopulation = useMemo(() => {
     return filteredCountries.reduce((acc, c) => acc + (c.population || 0), 0);
   }, [filteredCountries]);
+
+  // 2. True global population across all loaded countries (ignoring search/region filters)
+  const trueGlobalPopulation = useMemo(() => {
+    return countries.reduce((acc, c) => acc + (c.population || 0), 0);
+  }, [countries]);
 
   if (loading) {
     return (
@@ -60,8 +66,8 @@ useEffect(() => {
         </p>
       </div>
 
-      {/* KPI Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* KPI Summary Cards - Correctly placed at the top level */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-[#0d121f] p-5 rounded-2xl border border-slate-800/80 shadow-lg">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-medium">Filtered Entities</span>
@@ -69,13 +75,23 @@ useEffect(() => {
           </div>
           <p className="text-2xl font-bold text-slate-100">{filteredCountries.length}</p>
         </div>
+
         <div className="bg-[#0d121f] p-5 rounded-2xl border border-slate-800/80 shadow-lg">
           <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-medium">Total Filtered Population</span>
+            <span className="text-xs font-medium">Filtered Population</span>
             <Users size={18} className="text-cyan-400" />
           </div>
-          <p className="text-2xl font-bold text-slate-100">{totalPopulation.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-slate-100">{totalFilteredPopulation.toLocaleString()}</p>
         </div>
+
+        <div className="bg-[#0d121f] p-5 rounded-2xl border border-slate-800/80 shadow-lg">
+          <div className="flex items-center justify-between text-slate-400 mb-2">
+            <span className="text-xs font-medium">Total Global Population</span>
+            <Users size={18} className="text-cyan-400" />
+          </div>
+          <p className="text-2xl font-bold text-slate-100">{trueGlobalPopulation.toLocaleString()}</p>
+        </div>
+
         <div className="bg-[#0d121f] p-5 rounded-2xl border border-slate-800/80 shadow-lg">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-medium">Active Region</span>
