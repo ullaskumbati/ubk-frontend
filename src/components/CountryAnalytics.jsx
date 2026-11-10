@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Globe, Search, ArrowUpDown, Users, MapPin, Landmark } from 'lucide-react';
 
-export default function CountryAnalytics() {
+export default function CountryAnalytics(api,showMessage) {
   const [countries, setCountries] = useState([]);
   const [search, setSearch] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('All');

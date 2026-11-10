@@ -197,7 +197,7 @@ export default function App() {
           <WatchHistory watchHistory={watchHistory} />
         )}
         {activeTab === "recipes" && <RecipeFinder api={api} showMessage={showMessage} />}
-        {activeTab === "countries" && <CountryAnalytics />}
+        {activeTab === "countries" && <CountryAnalytics api={api} showMessage={showMessage} />}
       </main>
     </div>
   );
