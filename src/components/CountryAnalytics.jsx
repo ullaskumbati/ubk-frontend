@@ -8,23 +8,18 @@ export default function CountryAnalytics() {
   const [sortBy, setSortBy] = useState('population-desc');
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch('https://api.restcountries.com/countries/v5', {
-      headers: {
-        'Authorization': 'Bearer rc_live_demo'
-      }
+useEffect(() => {
+  api.get('/countries') // Calls your Render/local backend endpoint securely
+    .then((res) => {
+      const countryList = res?.data?.data?.data?.objects || [];
+      setCountries(countryList);
+      setLoading(false);
     })
-      .then((res) => res.json())
-      .then((resData) => {
-        const countryList = resData?.data?.objects || [];
-        setCountries(countryList);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error fetching countries:', err);
-        setLoading(false);
-      });
-  }, []);
+    .catch((err) => {
+      console.error('Error fetching countries:', err);
+      setLoading(false);
+    });
+}, [api]);
 
   const filteredCountries = useMemo(() => {
     return countries
