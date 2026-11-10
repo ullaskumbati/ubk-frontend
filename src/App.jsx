@@ -18,6 +18,7 @@ import Settings from "./components/Settings";
 import ChannelProfile from "./components/ChannelProfile";
 import WatchHistory from "./components/WatchHistory";
 import RecipeFinder from "./components/RecipeFinder";
+import CountryAnalytics from "./components/CountryAnalytics";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -189,6 +190,7 @@ export default function App() {
           <WatchHistory watchHistory={watchHistory} />
         )}
         {activeTab === "recipes" && <RecipeFinder api={api} showMessage={showMessage} />}
+        {activeTab === "countries" && <CountryAnalytics />}
       </main>
     </div>
   );
