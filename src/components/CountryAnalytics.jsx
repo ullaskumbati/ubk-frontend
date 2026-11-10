@@ -20,7 +20,21 @@ export default function CountryAnalytics({ api, showMessage }) {
                 setLoading(false);
             });
     }, [api]);
+    useEffect(() => {
+        // Pass the search term to your backend route
+        const endpoint = search ? `/countries?search=${search}` : '/countries';
 
+        api.get(endpoint)
+            .then((res) => {
+                const countryList = res?.data?.data?.objects || [];
+                setCountries(countryList);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.error('Error fetching countries:', err);
+                setLoading(false);
+            });
+    }, [search, api]);
     const filteredCountries = useMemo(() => {
         return countries
             .filter((c) => {
@@ -54,21 +68,7 @@ export default function CountryAnalytics({ api, showMessage }) {
             </div>
         );
     }
-    useEffect(() => {
-        // Pass the search term to your backend route
-        const endpoint = search ? `/countries?search=${search}` : '/countries';
 
-        api.get(endpoint)
-            .then((res) => {
-                const countryList = res?.data?.data?.objects || [];
-                setCountries(countryList);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error('Error fetching countries:', err);
-                setLoading(false);
-            });
-    }, [search, api]);
     return (
         <div className="space-y-6">
             <div>
