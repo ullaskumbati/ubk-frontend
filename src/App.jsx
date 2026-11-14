@@ -10,7 +10,8 @@ import {
   AlertCircle,
   Eye,
   ChefHat,
-  Globe
+  Globe,
+  Bot
 } from "lucide-react";
 
 import Auth from "./components/Auth";
@@ -20,6 +21,7 @@ import ChannelProfile from "./components/ChannelProfile";
 import WatchHistory from "./components/WatchHistory";
 import RecipeFinder from "./components/RecipeFinder";
 import CountryAnalytics from "./components/CountryAnalytics";
+import ChatBot from "./components/Chatbot";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -142,6 +144,12 @@ export default function App() {
               <Globe size={16} /> Country Analytics
             </button>
             <button
+              onClick={() => setActiveTab("chat")}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${activeTab === "chat" ? "bg-cyan-500 text-black shadow-[0_0_20px_rgba(6,182,212,0.2)]" : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"}`}
+            >
+              <Bot size={16} /> AI Assistant
+            </button>
+            <button
               onClick={fetchWatchHistoryData}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${activeTab === "history" ? "bg-cyan-500 text-black shadow-[0_0_20px_rgba(6,182,212,0.2)]" : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"}`}
             >
@@ -198,6 +206,7 @@ export default function App() {
         )}
         {activeTab === "recipes" && <RecipeFinder api={api} showMessage={showMessage} />}
         {activeTab === "countries" && <CountryAnalytics api={api} showMessage={showMessage} />}
+        {activeTab === "chat" && <ChatBot api={api} showMessage={showMessage} />}
       </main>
     </div>
   );
