@@ -112,6 +112,8 @@ export default function ChatBot({ api, showMessage }) {
       try {
         const header = res.headers.get("X-Sources");
         if (header) updateLast({ sources: JSON.parse(decodeURIComponent(header)) });
+          const toolsHeader = res.headers.get("X-Tools");
+        if (toolsHeader) updateLast({ tools: JSON.parse(decodeURIComponent(toolsHeader)) });
       } catch {
         /* ignore a bad header */
       }
@@ -229,6 +231,9 @@ export default function ChatBot({ api, showMessage }) {
                     </span>
                   ))}
                 </div>
+              )}
+               {m.tools?.length > 0 && (
+                <p className="text-[10px] text-slate-500 mt-1">Used: {m.tools.join(", ")}</p>
               )}
             </div>
             {m.role === "user" && (
